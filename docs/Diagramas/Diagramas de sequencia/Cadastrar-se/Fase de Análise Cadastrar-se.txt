@@ -1,0 +1,63 @@
+@startuml
+skinparam componentStyle rectangle
+
+package "Cliente" {
+  component AppFrontend
+}
+
+package "Auth" {
+  component AuthController
+  component AuthMiddleware
+}
+
+package "Boloes" {
+  component BoloesController
+}
+
+package "Partidas" {
+  component PartidasController
+}
+
+package "Apostas" {
+  component ApostasController
+}
+
+package "Notificacoes" {
+  component NotificacaoService
+}
+
+package "Admin" {
+  component AdminController
+}
+
+package "Persistencia" {
+  component Database
+}
+
+' Cliente consome a API
+AppFrontend --> AuthController : HTTP/JSON
+AppFrontend --> BoloesController : HTTP/JSON
+AppFrontend --> PartidasController : HTTP/JSON
+AppFrontend --> ApostasController : HTTP/JSON
+AppFrontend --> AdminController : HTTP/JSON
+
+' Autenticação/autorização
+AuthMiddleware ..> AuthController : valida
+BoloesController ..> AuthMiddleware : usa
+PartidasController ..> AuthMiddleware : usa
+ApostasController ..> AuthMiddleware : usa
+AdminController ..> AuthMiddleware : usa
+
+' Persistência (rótulos específicos por dominio)
+AuthController --> Database : autentica usuario
+BoloesController --> Database : CRUD boloes
+PartidasController --> Database : CRUD partidas
+ApostasController --> Database : CRUD apostas
+AdminController --> Database : gerencia dados
+
+' Integrações entre dominios
+ApostasController ..> PartidasController : usa
+ApostasController ..> BoloesController : usa
+NotificacaoService ..> AuthController : usa
+NotificacaoService ..> PartidasController : usa
+@enduml

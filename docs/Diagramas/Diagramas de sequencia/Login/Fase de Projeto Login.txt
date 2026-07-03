@@ -1,0 +1,35 @@
+@startuml
+title FAZER LOGIN (Projeto)
+
+actor Usuario
+boundary "AppFrontend" as App
+control "AuthController" as Controller
+entity "Usuario" as UsuarioEntity
+entity "Database" as DB
+
+Usuario -> App : informa email e senha
+activate App
+
+App -> Controller : POST /auth/login(email, senha)
+activate Controller
+
+Controller -> DB : buscarUsuario(email)
+activate DB
+
+DB --> Controller : usuario:Usuario
+deactivate DB
+
+Controller -> Controller : comparePassword(senha, hash)
+
+alt senha valida
+    Controller -> Controller : generateToken(usuario)
+    Controller --> App : 200 OK { token, usuario }
+    App --> Usuario : acessa Menu Principal
+else senha invalida
+    Controller --> App : 401 Unauthorized
+    App --> Usuario : exibe erro de login
+end
+
+deactivate Controller
+deactivate App
+@enduml
