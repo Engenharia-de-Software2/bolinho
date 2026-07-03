@@ -1,0 +1,44 @@
+@startuml
+title CRIAR BOLÃO (Projeto)
+
+actor Usuario
+boundary "AppFrontend" as App
+control "BoloesController" as Controller
+control "AuthMiddleware" as Middleware
+entity "Bolao" as BolaoEntity
+entity "Database" as DB
+
+Usuario -> App : preenche dados do bolao
+activate App
+
+App -> Controller : POST /boloes(dados, token)
+activate Controller
+
+Controller -> Middleware : authMiddleware(token)
+activate Middleware
+
+Middleware -> Middleware : verifyToken(token)
+Middleware --> Controller : usuario autenticado
+deactivate Middleware
+
+Controller -> Controller : validaDados(nome, tipo, ...)
+Controller -> Controller : gerarCodigo()
+
+Controller -> BolaoEntity : new Bolao(nome, tipo, criador_id, codigo_convite)
+activate BolaoEntity
+
+BolaoEntity --> Controller : bolao:Bolao
+deactivate BolaoEntity
+
+Controller -> DB : registrarBolao(bolao)
+activate DB
+
+DB --> Controller : bolao criado (id)
+deactivate DB
+
+Controller --> App : 201 Created { bolao, codigo_convite }
+deactivate Controller
+
+App --> Usuario : exibe codigo do bolao
+deactivate App
+@enduml
