@@ -1,0 +1,20 @@
+// Paleta / Design tokens compartilhados por todo o app.
+export const CORES = {
+  bg: "#F1F5F9",
+  campoEscuro: "#0B3D2E",
+  campoEscuro2: "#0F5132",
+  dourado: "#F2B705",
+  texto: "#0F172A",
+  textoSuave: "#64748B",
+  branco: "#FFFFFF",
+  borda: "#E2E8F0",
+  inputBg: "#F8FAFC",
+  perigo: "#DC2626",
+  perigoBg: "#FEE2E2",
+  sucesso: "#15803D",
+  sucessoBg: "#DCFCE7",
+  info: "#1D4ED8",
+  infoBg: "#DBEAFE",
+  alerta: "#B45309",
+  alertaBg: "#FEF3C7",
+};
